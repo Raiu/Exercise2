@@ -5,7 +5,19 @@ namespace Exercise2;
 
 public class Parrot
 {
-    internal void Run()
+    private int _maxIter;
+
+    public Parrot()
+    {
+        _maxIter = 10;
+    }
+
+    public Parrot(int maxIter)
+    {
+        _maxIter = maxIter;
+    }
+
+    public void Run()
     {
         StringBuilder sb = new();
         sb.AppendLine("Welcome to the Parrot game");
@@ -26,11 +38,11 @@ public class Parrot
         StringBuilder sb1 = new();
         StringBuilder sb2 = new();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < _maxIter; i++)
         {
             sb1.Append(input);
-            sb2.Append($"{i+1}. {input}{(i==9 ? "" : ", " )}");
-            Console.Write($"{i + 1}. {input}{(i == 9 ? "" : ", ")}");
+            sb2.Append($"{i + 1}. {input}{(i == _maxIter - 1 ? "" : ", " )}");
+            Console.Write($"{i + 1}. {input}{(i == _maxIter - 1 ? "" : ", ")}");
         }
         Console.Write("\n\n");
 
@@ -38,6 +50,6 @@ public class Parrot
 
         Console.WriteLine(sb2 + "\n");        
 
-        Console.WriteLine("\n\nWas it not fun?!\n\nokay... Returning to main menu");
+        Console.WriteLine("\n\nWas it fun?!\n\nokay... Returning to main menu");
     }
 }
