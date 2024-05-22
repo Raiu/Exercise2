@@ -4,22 +4,29 @@ public static class UserInput
 {
     // private static int _attempts = 5;
 
-    /*
-    public static int Int()
-    {
-        throw NotImplementedException;
-    }
+    // public static int Int()
+    // {
+    //     throw NotImplementedException;
+    // }
 
-    public static int String()
+    public static string String()
     {
-        string? input = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(input))
+        int attempts = 0;
+        while (true)
         {
-            Console.WriteLine("Error: Invalid input");
-            continue;
+            if (attempts > Config.UserInputAttempts) {
+                Console.WriteLine("Too many attempts!");
+                return "-1";
+            }
+            attempts++;
+
+            string? input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+
+            Console.WriteLine("Please enter a string");
         }
-
     }
-    */
-
 }

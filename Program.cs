@@ -11,22 +11,20 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
         Run();
     }
 
     private static void Run()
     {
         PrintWelcomeMessage();
-        PrintUsage();
 
         bool running = true;
         while (running)
         {
+            PrintUsage();
+
             Console.WriteLine("\nEnter your command:");
-
             string? command = Console.ReadLine();
-
             if (string.IsNullOrWhiteSpace(command))
             {
                 Console.WriteLine("Error: Invalid input");
@@ -46,7 +44,8 @@ class Program
                     cinema.Run();
                     break;
                 case "2":
-                    //PrintEmployees();
+                    Parrot parrot = new();
+                    parrot.Run();
                     break;
                 case "?":
                 case "help":
@@ -59,20 +58,22 @@ class Program
         }
     }
 
+    private static void PrintWelcomeMessage()
+    {
+        StringBuilder sb = new();
+        sb.AppendLine("Welcome to Exercise 2!");
+        Console.WriteLine(sb);
+    }
+
     private static void PrintUsage()
     {
         StringBuilder sb = new();
         sb.AppendLine("\nCommands:");
         sb.AppendLine("   1             Cinema");
-        sb.AppendLine("   2             Print all employees");  
+        sb.AppendLine("   2             Parrot game");
+        sb.AppendLine("   3             3rd word game");
         sb.AppendLine("   0 || quit     Quit");
         sb.AppendLine("   ? || help     Print help and usage");
-        Console.WriteLine(sb.ToString());
-    }
-
-    private static void PrintWelcomeMessage()
-    {
-        StringBuilder sb = new();
         Console.WriteLine(sb.ToString());
     }
 }
