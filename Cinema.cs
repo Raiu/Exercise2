@@ -35,7 +35,7 @@ public class Cinema
                     SingleTicketPriceInquiry();
                     break;
                 case "2":
-                    //PrintEmployees();
+                    BuyTickets();
                     break;
                 case "?":
                 case "help":
@@ -47,52 +47,15 @@ public class Cinema
             }
         }
     }
-    
-    private void BuyTickets()
-    {
-        ShoppingCart cart = new();
 
-        Console.WriteLine("You can either provide how many tickets you want to buy and ill help you furhter.");
-        Console.WriteLine("Or you can use the command \"multi\" to buy multiple tickets.");
-        Console.WriteLine("Example: multi 34 24 21 50 34");
-
-        string command;
-        string? input;
-        int numberOfTickets = 0;
-        int attempts = 0;
-        while (true)
-        {
-            if (attempts > 5) {
-                Console.WriteLine("Too many attempts!");
-                return;
-            }
-            attempts++;
-
-            input = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                Console.WriteLine("Error: Invalid input");
-                PrintUsage();
-                continue;
-            }
-
-            else if (int.TryParse(input, out numberOfTickets))
-            {
-                command = "wizard";
-                break;
-            }
-            Console.WriteLine("Please enter a valid option");
-        }
-    }
-
-    private static void SingleTicketPriceInquiry()
+    private void SingleTicketPriceInquiry()
     {
         Console.WriteLine("Enter your age for a price estimation: ");
         int age;
         int attempts = 0;
         while (true)
         {
-            if (attempts > 5) {
+            if (attempts > Config.UserInputAttempts) {
                 Console.WriteLine("Too many attempts!\nReturning to main menu");
                 return;
             }
@@ -113,6 +76,130 @@ public class Cinema
         Console.WriteLine($"You are {article} {ageGroup}, so the ticket price will be {culturePrice}");
 
         return;
+    }
+
+    private void BuyTickets()
+    {
+        ShoppingCart cart = new();
+
+        Console.WriteLine("You can either provide how many tickets you want to buy and ill help you furhter.");
+        Console.WriteLine("Or you can use the command \"multi\" to buy multiple tickets.");
+        Console.WriteLine("Example: multi 34 24 21 50 34");
+
+        var (command, argument) = RequestInputBuyTickets();
+        if (command == "fail") return;
+
+        if (command == "multi")
+        {
+            string[] ages = argument.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string age in ages)
+            {
+                if (!int.TryParse(age, out int result))
+                {
+                    Console.WriteLine("multi contains invalid numbers");
+                    return;
+                }
+
+                cart.AddTicket(result);
+            }
+        }
+        else if (command == "wizard")
+        {
+            if (int.TryParse(argument, out int result))
+            {
+                WizardGenTickets(result);
+            }
+            else
+            {
+                Console.WriteLine("invalid number for wizard");
+                return;
+            }
+        }
+    }
+
+    private List<CinemaTicket> WizardGenTickets(int numberOfTickets)
+    {
+        List<CinemaTicket> tickets = new();
+        for (int i = 0; i < numberOfTickets; i++)
+        {
+
+            tickets.Add(new CinemaTicket(age));
+        }
+
+        return tickets;
+    }
+
+    private int RequestInputInt()
+    {
+        int result = 0;
+        while (true)
+        {
+            if (attempts > 5) {
+                Console.WriteLine("Too many attempts!");
+                break;
+            }
+            attempts++;
+
+            string? input = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Error: Invalid input");
+                continue;
+            }
+
+            if (input.ToLower().StartsWith("multi"))
+            {
+                command = "multi";
+                argument = input.ToLower().Replace("multi ", "").Trim();
+            }
+            else if (int.TryParse(input, out int result))
+            {
+                command = "wizard";
+                argument = input;
+                break;
+            }
+
+            Console.WriteLine("Please enter a valid option");
+        }
+    }
+
+    private (string, string) RequestInputBuyTickets()
+    {
+        string command = "fail";
+        string argument = "";
+
+        int attempts = 0;
+        while (true)
+        {
+            if (attempts > 5) {
+                Console.WriteLine("Too many attempts!");
+                break;
+            }
+            attempts++;
+
+            string? input = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Error: Invalid input");
+                continue;
+            }
+
+            if (input.ToLower().StartsWith("multi"))
+            {
+                command = "multi";
+                argument = input.ToLower().Replace("multi ", "").Trim();
+            }
+            else if (int.TryParse(input, out int result))
+            {
+                command = "wizard";
+                argument = input;
+                break;
+            }
+
+            Console.WriteLine("Please enter a valid option");
+        }
+
+        return (command, argument);
     }
 
     private static void PrintUsage()

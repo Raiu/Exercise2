@@ -16,4 +16,6 @@ public static class Config
     public const int TeenAgeCutOff          = 20;
     public const int SeniorAgeCutOff        = 65;
     public const int SuperSeniorAgeCutOff   = 99;
+
+    public const int UserInputAttempts      = 5;
 }
