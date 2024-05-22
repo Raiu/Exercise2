@@ -72,7 +72,7 @@ public class Cinema
         int price = new CinemaTicket(new Customer(age).AgeGroup).Price;
 
         string article = (ageGroup == "adult") ? "an" : "a";
-        string culturePrice = String.Format(Config.Culture, "{0:C0}", price);
+        string culturePrice = string.Format(Config.Culture, "{0:C0}", price);
         Console.WriteLine($"You are {article} {ageGroup}, so the ticket price will be {culturePrice}");
 
         return;
@@ -105,62 +105,69 @@ public class Cinema
         }
         else if (command == "wizard")
         {
-            if (int.TryParse(argument, out int result))
-            {
-                WizardGenTickets(result);
-            }
-            else
+            if (!int.TryParse(argument, out int result))
             {
                 Console.WriteLine("invalid number for wizard");
                 return;
             }
+            List<CinemaTicket> tickets = WizardGenTickets(result);
+            if (tickets.Count == 0) return;
+
+            foreach (var ticket in tickets)
+            {
+                cart.AddTicket(ticket);
+            }
         }
+
+        cart.SummarizeCart();
+        return;
     }
 
     private List<CinemaTicket> WizardGenTickets(int numberOfTickets)
     {
+        Console.WriteLine("Please provide the age of each Cinema visitor:");
+        bool error = false;
         List<CinemaTicket> tickets = new();
         for (int i = 0; i < numberOfTickets; i++)
         {
+            Console.WriteLine("Enter age:");
+            int age = RequestInputInt();
+            
+            if (age == -1) 
+            {
+                error = true;
+                break;
+            }
 
             tickets.Add(new CinemaTicket(age));
         }
+
+        if (error) return new List<CinemaTicket>();
 
         return tickets;
     }
 
     private int RequestInputInt()
     {
+        int attempts = 0;
         int result = 0;
         while (true)
         {
-            if (attempts > 5) {
+            if (attempts > Config.UserInputAttempts) {
                 Console.WriteLine("Too many attempts!");
+                result = -1;
                 break;
             }
             attempts++;
-
+            
             string? input = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(input))
+            if (int.TryParse(input, out result))
             {
-                Console.WriteLine("Error: Invalid input");
-                continue;
-            }
-
-            if (input.ToLower().StartsWith("multi"))
-            {
-                command = "multi";
-                argument = input.ToLower().Replace("multi ", "").Trim();
-            }
-            else if (int.TryParse(input, out int result))
-            {
-                command = "wizard";
-                argument = input;
                 break;
             }
-
-            Console.WriteLine("Please enter a valid option");
+            Console.WriteLine("Please enter a valid number");
         }
+        return result;
     }
 
     private (string, string) RequestInputBuyTickets()

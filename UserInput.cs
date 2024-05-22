@@ -2,11 +2,12 @@
 
 public static class UserInput
 {
-    private static int _attempts = 5;
+    // private static int _attempts = 5;
 
+    /*
     public static int Int()
     {
-
+        throw NotImplementedException;
     }
 
     public static int String()
@@ -19,5 +20,6 @@ public static class UserInput
         }
 
     }
+    */
 
 }
