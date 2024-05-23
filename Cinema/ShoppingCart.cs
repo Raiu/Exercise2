@@ -42,7 +42,7 @@ public class ShoppingCart
         foreach (var ticket in _tickets)
         {
             string ticketPrice = string.Format(Config.Culture, "{0:C0}", ticket.Price);
-            Console.WriteLine($"{ticket.AgeGroup} - {ticketPrice}kr");
+            Console.WriteLine($"{ticket.AgeGroup} - {ticketPrice}");
         }
 
         Console.WriteLine($"\nTotal tickets: {GetTotalTickets()}");

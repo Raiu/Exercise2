@@ -39,7 +39,7 @@ public class Cinema
                     break;
                 case "?":
                 case "help":
-                    //PrintHelp();
+                    PrintUsage();
                     break;
                 default:
                     Console.WriteLine($"{command} is an invalid command");
@@ -84,7 +84,9 @@ public class Cinema
 
         Console.WriteLine("You can either provide how many tickets you want to buy and ill help you furhter.");
         Console.WriteLine("Or you can use the command \"multi\" to buy multiple tickets.");
-        Console.WriteLine("Example: multi 34 24 21 50 34");
+        Console.WriteLine("Usage:");
+        Console.WriteLine("   [number-of-tickets]");
+        Console.WriteLine("   multi <age1> <age2> ... <ageN>");
 
         var (command, argument) = RequestInputBuyTickets();
         if (command == "fail") return;
@@ -195,6 +197,7 @@ public class Cinema
             {
                 command = "multi";
                 argument = input.ToLower().Replace("multi ", "").Trim();
+                break;
             }
             else if (int.TryParse(input, out int result))
             {
